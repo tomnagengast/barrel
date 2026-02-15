@@ -66,3 +66,6 @@ fastlane/test_output
 
 # mise local overrides
 mise.local.toml
+
+# Claude Code local settings
+.claude/settings.local.json

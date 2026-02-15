@@ -24,6 +24,10 @@ prek install          # install git hooks
 prek run --all-files  # run hooks on all files
 ```
 
+## Cloud environment (Claude Code web)
+
+A SessionStart hook (`.claude/hooks/session-init.sh`) auto-installs Swift and cmark-gfm on Linux. On macOS the hook is a no-op. The engine builds and tests on both platforms — AppKit code is guarded behind `#if canImport(AppKit)` and compiles as stubs on Linux.
+
 ## Repo map
 
 | Path | What |
@@ -33,6 +37,7 @@ prek run --all-files  # run hooks on all files
 | `agent_docs/` | Detailed architecture, conventions, and performance targets |
 | `scripts/` | Build, test, and perf scripts |
 | `fixtures/` | Test markdown files (small → large) |
+| `.claude/` | SessionStart hook and project settings for Claude Code |
 
 ## Core invariant
 

@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "MarkdownEngine",
     platforms: [
-        .macOS(.v14),
+        .macOS(.v14),  // macOS minimum for AppKit features; Linux builds ignore this.
     ],
     products: [
         .library(name: "MarkdownCore", targets: ["MarkdownCore"]),
@@ -28,7 +28,7 @@ let package = Package(
         .systemLibrary(
             name: "Ccmark",
             pkgConfig: "libcmark-gfm",
-            providers: [.brew(["cmark-gfm"])]
+            providers: [.brew(["cmark-gfm"]), .apt(["libcmark-gfm-dev"])]
         ),
         .target(
             name: "MarkdownParse",

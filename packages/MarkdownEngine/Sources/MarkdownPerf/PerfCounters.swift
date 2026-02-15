@@ -1,5 +1,4 @@
 import Foundation
-import os
 
 // MARK: - PerfCounters
 
@@ -123,11 +122,19 @@ public final class PerfCounters: @unchecked Sendable {
 
 /// Measure execution time in microseconds.
 public func measureMicroseconds(_ block: () -> Void) -> Int {
+    #if canImport(Darwin)
     let start = DispatchTime.now()
     block()
     let end = DispatchTime.now()
     let nanos = end.uptimeNanoseconds - start.uptimeNanoseconds
     return Int(nanos / 1000)
+    #else
+    let start = DispatchTime.now()
+    block()
+    let end = DispatchTime.now()
+    let nanos = end.uptimeNanoseconds - start.uptimeNanoseconds
+    return Int(nanos / 1000)
+    #endif
 }
 
 /// Async version of measureMicroseconds.
