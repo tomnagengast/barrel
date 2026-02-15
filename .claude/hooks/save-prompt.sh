@@ -3,6 +3,7 @@ set -euo pipefail
 
 # UserPromptSubmit hook
 # Logs the user prompt as the start of a new turn.
+# Also writes a marker file with the start timestamp for duration calc.
 #
 # Receives JSON on stdin:
 #   { "prompt", "session_id", "transcript_path", "cwd", ... }
@@ -16,9 +17,8 @@ HOOK_JSON="$(mktemp)"
 trap 'rm -f "$HOOK_JSON"' EXIT
 cat > "$HOOK_JSON"
 
-# Extract prompt text and session_id, write the "Prompt" half of the turn.
 python3 - "$HOOK_JSON" "$PROMPTS_DIR" <<'PYEOF'
-import json, sys, os
+import json, sys, os, time
 from datetime import datetime
 
 hook_json_path = sys.argv[1]
@@ -41,4 +41,9 @@ session_file = os.path.join(prompts_dir, f"{session_id}.md")
 
 with open(session_file, "a") as f:
     f.write(f"## {timestamp}\n\n### Prompt\n\n{prompt}\n\n")
+
+# Write a marker with epoch time for duration calc by save-response.sh
+marker = os.path.join(prompts_dir, f".turn_start_{session_id}")
+with open(marker, "w") as f:
+    f.write(str(time.time()))
 PYEOF
