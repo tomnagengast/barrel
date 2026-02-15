@@ -5,9 +5,23 @@ A native macOS AppKit Markdown editor with incremental live preview.
 ## Quick start
 
 ```bash
-scripts/check.sh    # format + lint + build + test
-scripts/test.sh     # unit tests only
-scripts/perf_smoke.sh  # performance smoke tests against fixtures
+mise install          # install swiftformat, swiftlint, cmark-gfm
+mise run check        # format + lint + build + test
+mise run test         # unit tests only
+mise run perf         # performance smoke tests
+scripts/check.sh     # build + test (no mise required)
+scripts/perf_smoke.sh # perf smoke tests (no mise required)
+```
+
+## Pre-commit
+
+Pre-commit hooks are configured in `prek.toml` (uses [prek](https://prek.j178.dev)):
+- Trailing whitespace, EOF fixer, large file check, merge conflict detection
+- SwiftFormat lint, SwiftLint strict, Swift build
+
+```bash
+prek install          # install git hooks
+prek run --all-files  # run hooks on all files
 ```
 
 ## Repo map

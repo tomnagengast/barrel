@@ -63,3 +63,6 @@ fastlane/test_output
 
 # OS
 .DS_Store
+
+# mise local overrides
+mise.local.toml

@@ -1,0 +1,31 @@
+[tools]
+swiftformat = "0.55.3"
+swiftlint = "0.57.1"
+"pipx:cmark-gfm" = "latest"
+
+[env]
+BARREL_ENGINE_DIR = "{{config_root}}/packages/MarkdownEngine"
+
+[tasks.build]
+description = "Build the engine package"
+run = "cd $BARREL_ENGINE_DIR && swift build"
+
+[tasks.test]
+description = "Run unit tests"
+run = "cd $BARREL_ENGINE_DIR && swift test"
+
+[tasks.check]
+description = "Format, lint, build, and test"
+depends = ["format", "lint", "build", "test"]
+
+[tasks.format]
+description = "Format Swift source files"
+run = "swiftformat packages/MarkdownEngine/Sources packages/MarkdownEngine/Tests apps/MarkdownApp/Sources"
+
+[tasks.lint]
+description = "Lint Swift source files"
+run = "swiftlint lint --strict packages/MarkdownEngine/Sources apps/MarkdownApp/Sources"
+
+[tasks.perf]
+description = "Run performance smoke tests"
+run = "cd $BARREL_ENGINE_DIR && swift test --filter MarkdownPerfTests"
