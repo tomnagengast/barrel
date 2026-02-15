@@ -106,8 +106,23 @@ with open(transcript_path) as f:
         entry_type = entry.get("type", "")
         timestamp = entry.get("timestamp", "")
 
+        # Skip entries from other sessions — transcript JSONL contains
+        # full history from prior continued sessions
+        entry_session = entry.get("sessionId", "")
+        if entry_session and entry_session != session_id:
+            continue
+
+        # Skip non-message entry types (system, progress, queue-operation)
+        if entry_type not in ("user", "assistant"):
+            continue
+
         # Real user message (not a tool result) marks turn boundary
+        # Skip compact summaries and transcript-only entries — these are
+        # system-injected context, not real user prompts
         if entry_type == "user" and "toolUseResult" not in entry:
+            if entry.get("isCompactSummary") or entry.get("isVisibleInTranscriptOnly"):
+                continue
+
             last_assistant_texts = []
             tool_calls = Counter()
             tool_errors = 0
