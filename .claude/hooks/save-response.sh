@@ -3,26 +3,26 @@ set -euo pipefail
 
 # Stop hook
 # Appends the assistant's final response, turn statistics, and subagent
-# summaries to the session prompts file.
+# summaries to the session log file.
 #
 # Receives JSON on stdin:
 #   { "stop_reason", "session_id", "transcript_path", "cwd", ... }
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
-PROMPTS_DIR="$PROJECT_DIR/prompts"
-mkdir -p "$PROMPTS_DIR"
+SESSIONS_DIR="$PROJECT_DIR/sessions"
+mkdir -p "$SESSIONS_DIR"
 
 HOOK_JSON="$(mktemp)"
 trap 'rm -f "$HOOK_JSON"' EXIT
 cat > "$HOOK_JSON"
 
-python3 - "$HOOK_JSON" "$PROMPTS_DIR" "$PROJECT_DIR" <<'PYEOF'
+python3 - "$HOOK_JSON" "$SESSIONS_DIR" "$PROJECT_DIR" <<'PYEOF'
 import json, sys, os, re, time, subprocess
 from datetime import datetime
 from collections import Counter
 
 hook_json_path = sys.argv[1]
-prompts_dir = sys.argv[2]
+sessions_dir = sys.argv[2]
 project_dir = sys.argv[3]
 
 try:
@@ -35,7 +35,7 @@ session_id = data.get("session_id", "unknown")
 stop_reason = data.get("stop_reason", "unknown")
 transcript_path = data.get("transcript_path", "")
 
-session_file = os.path.join(prompts_dir, f"{session_id}.md")
+session_file = os.path.join(sessions_dir, f"{session_id}.md")
 if not os.path.isfile(session_file):
     sys.exit(0)
 if not transcript_path or not os.path.isfile(transcript_path):
@@ -249,7 +249,7 @@ with open(transcript_path) as f:
 # ── Duration ────────────────────────────────────────────────────────
 
 duration_str = "unknown"
-marker_path = os.path.join(prompts_dir, f".turn_start_{session_id}")
+marker_path = os.path.join(sessions_dir, f".turn_start_{session_id}")
 if os.path.isfile(marker_path):
     try:
         with open(marker_path) as f:

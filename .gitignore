@@ -69,3 +69,6 @@ mise.local.toml
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Session turn-start markers (ephemeral)
+sessions/.turn_start_*
