@@ -1,0 +1,5 @@
+module Ccmark [system] {
+    header "include/shim.h"
+    link "cmark-gfm"
+    export *
+}

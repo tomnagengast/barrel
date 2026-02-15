@@ -60,3 +60,15 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# OS
+.DS_Store
+
+# mise local overrides
+mise.local.toml
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Session turn-start markers (ephemeral)
+sessions/.turn_start_*
