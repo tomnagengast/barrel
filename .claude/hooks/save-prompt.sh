@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # UserPromptSubmit hook
-# Appends every user prompt to prompts/ with a clean timestamp prefix.
+# Logs the user prompt as the start of a new turn.
 #
 # Receives JSON on stdin:
 #   { "prompt", "session_id", "transcript_path", "cwd", ... }
@@ -16,7 +16,7 @@ HOOK_JSON="$(mktemp)"
 trap 'rm -f "$HOOK_JSON"' EXIT
 cat > "$HOOK_JSON"
 
-# Extract prompt text and session_id via Python.
+# Extract prompt text and session_id, write the "Prompt" half of the turn.
 python3 - "$HOOK_JSON" "$PROMPTS_DIR" <<'PYEOF'
 import json, sys, os
 from datetime import datetime
@@ -35,12 +35,10 @@ if not prompt:
     sys.exit(0)
 
 session_id = data.get("session_id", "unknown")
-
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-# One file per session, append each prompt with a timestamp header.
 session_file = os.path.join(prompts_dir, f"{session_id}.md")
 
 with open(session_file, "a") as f:
-    f.write(f"## {timestamp}\n\n{prompt}\n\n---\n\n")
+    f.write(f"## {timestamp}\n\n### Prompt\n\n{prompt}\n\n")
 PYEOF
