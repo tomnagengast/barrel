@@ -30,6 +30,8 @@ playground.xcworkspace
 # .swiftpm
 
 .build/
+**/.swiftpm/xcode/package.xcworkspace/
+**/.swiftpm/xcode/xcuserdata/
 
 # CocoaPods
 #
@@ -72,3 +74,6 @@ mise.local.toml
 
 # Session turn-start markers (ephemeral)
 sessions/.turn_start_*
+
+# Local profiling artifacts
+*.profraw
