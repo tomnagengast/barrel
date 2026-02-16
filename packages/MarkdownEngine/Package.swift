@@ -13,6 +13,7 @@ let package = Package(
         .library(name: "MarkdownLayout", targets: ["MarkdownLayout"]),
         .library(name: "MarkdownRender", targets: ["MarkdownRender"]),
         .library(name: "MarkdownPerf", targets: ["MarkdownPerf"]),
+        .executable(name: "MarkdownApp", targets: ["MarkdownApp"]),
     ],
     targets: [
         // MARK: - Core
@@ -48,7 +49,7 @@ let package = Package(
 
         .target(
             name: "MarkdownRender",
-            dependencies: ["MarkdownCore", "MarkdownLayout"],
+            dependencies: ["MarkdownCore", "MarkdownParse", "MarkdownLayout"],
             swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
         ),
 
@@ -58,6 +59,14 @@ let package = Package(
             name: "MarkdownPerf",
             dependencies: [],
             swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+        ),
+
+        // MARK: - App
+
+        .executableTarget(
+            name: "MarkdownApp",
+            dependencies: ["MarkdownCore", "MarkdownParse", "MarkdownLayout", "MarkdownRender", "MarkdownPerf"],
+            path: "Sources/MarkdownApp"
         ),
 
         // MARK: - Tests

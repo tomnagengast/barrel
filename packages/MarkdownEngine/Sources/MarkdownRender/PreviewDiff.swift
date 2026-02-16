@@ -1,6 +1,7 @@
 import Foundation
 import MarkdownCore
 import MarkdownLayout
+import MarkdownParse
 
 // MARK: - PreviewDiff
 

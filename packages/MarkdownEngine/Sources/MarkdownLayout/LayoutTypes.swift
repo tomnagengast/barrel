@@ -43,7 +43,10 @@ public struct LayoutBlock: Sendable {
 ///
 /// Stage 1 (TextKit): an `NSAttributedString`.
 /// Stage 2 (CoreText): a `CTFrame` plus line metrics.
-public enum DrawPayload: Sendable {
+///
+/// `NSAttributedString` is immutable but not annotated as `Sendable` in
+/// Foundation, so we use `@unchecked Sendable` for this enum.
+public enum DrawPayload: @unchecked Sendable {
     /// Attributed string for TextKit-based preview.
     case attributedString(NSAttributedString)
     /// Placeholder for CoreText backend (not yet implemented).

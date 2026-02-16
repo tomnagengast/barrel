@@ -7,7 +7,10 @@ import Foundation
 /// Created on the main thread and handed to background work.
 /// Because `NSString` is immutable (and bridged `String` copies on mutation),
 /// the snapshot is safe to read from any thread.
-public struct DocumentSnapshot: Sendable {
+///
+/// `NSString` is not annotated as `Sendable` in Foundation, so we opt into
+/// `@unchecked Sendable` after auditing that this type stores immutable data.
+public struct DocumentSnapshot: @unchecked Sendable {
     /// The full document text. UTF-16 indexed to match AppKit's `NSRange`.
     public let text: NSString
     /// Monotonically increasing generation counter. Every edit increments this.
